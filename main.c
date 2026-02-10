@@ -5,7 +5,7 @@ int main() {
     int qtd = 0;
     int capacidade = 0;
     int opcao;
-//erasmogay 
+
     // Tenta carregar ao iniciar
     // Note: minhaLista recebe o retorno da função
     minhaLista = carregarArquivo(&qtd, &capacidade);

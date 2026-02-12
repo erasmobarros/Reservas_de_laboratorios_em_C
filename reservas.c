@@ -197,8 +197,13 @@ void atualizarReserva(Reserva *lista, int qtd) {
 
     int id;
     listarReservas(lista, qtd);
-    
+    printf("\nDigite o ID da reserva que deseja atualizar: ");
+    scanf("%d", &id);
 
+    int idx = buscarPorId(lista, qtd, id);
+    if (idx == -1) {
+        printf("Reserva nao encontrada.\n");
+        return;
     }
 
     int opcao;
@@ -275,7 +280,7 @@ void atualizarReserva(Reserva *lista, int qtd) {
         default:
             printf("Opcao invalida.\n");
     }
-
+}
 
 
 void removerReserva(Reserva *lista, int *qtd) {

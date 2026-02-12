@@ -28,3 +28,4 @@ void removerReserva(Reserva *lista, int *qtd);
 void limparBuffer();
 
 #endif
+    

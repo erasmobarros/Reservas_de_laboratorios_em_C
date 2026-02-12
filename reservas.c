@@ -190,20 +190,93 @@ void listarReservas(Reserva *lista, int qtd) {
 }
 
 void atualizarReserva(Reserva *lista, int qtd) {
-    int id;
-    printf("Digite o ID da reserva: ");
-    scanf("%d", &id);
-    
-    int idx = buscarPorId(lista, qtd, id);
-    if (idx == -1) {
-        printf("Reserva nao encontrada.\n");
+    if (qtd == 0) {
+        printf("\nNenhuma reserva cadastrada para atualizar.\n");
         return;
     }
+
+    int id;
+    listarReservas(lista, qtd);
     
-    printf("Novo Solicitante: ");
-    scanf(" %[^\n]", lista[idx].solicitante);
-    printf("Atualizado!\n");
-}
+
+    }
+
+    int opcao;
+    printf("\n--- O que deseja atualizar? ---\n");
+    printf("1 - Nome do solicitante\n");
+    printf("2 - Laboratorio\n");
+    printf("3 - Data\n");
+    printf("4 - Horario inicial\n");
+    printf("5 - Horario final\n");
+    printf("0 - Cancelar\n");
+    printf("Escolha: ");
+    scanf("%d", &opcao);
+    limparBuffer();
+
+    switch(opcao) {
+        case 1:
+            printf("Novo nome do solicitante: ");
+            scanf(" %[^\n]", lista[idx].solicitante);
+            printf("Solicitante atualizado!\n");
+            break;
+
+        case 2:
+            printf("Novo laboratorio: ");
+            scanf(" %[^\n]", lista[idx].laboratorio);
+
+            if (!verificarDisponibilidadelab(lista, qtd, lista[idx].laboratorio)) {
+                printf("Laboratorio indisponivel! Alteracao cancelada.\n");
+                return;
+            }
+            printf("Laboratorio atualizado!\n");
+            break;
+
+        case 3:
+            printf("Nova data (DD/MM/AAAA): ");
+            scanf("%s", lista[idx].data);
+
+            if (!validarData(lista[idx].data)) {
+                printf("Data invalida! Alteracao cancelada.\n");
+                return;
+            }
+            if (!verificarDisponibilidadedata(lista, qtd, lista[idx].data)) {
+                printf("Data indisponivel! Alteracao cancelada.\n");
+                return;
+            }
+            printf("Data atualizada!\n");
+            break;
+
+        case 4:
+            printf("Novo horario inicial (HH:MM): ");
+            scanf("%s", lista[idx].horario);
+
+            if (!validarHorario(lista[idx].horario)) {
+                printf("Horario invalido! Alteracao cancelada.\n");
+                return;
+            }
+            printf("Horario inicial atualizado!\n");
+            break;
+
+        case 5:
+            printf("Novo horario final (HH:MM): ");
+            scanf("%s", lista[idx].horario_fim);
+
+            if (!validarHorario(lista[idx].horario_fim)) {
+                printf("Horario invalido! Alteracao cancelada.\n");
+                return;
+            }
+            printf("Horario final atualizado!\n");
+            break;
+
+        case 0:
+            printf("Atualizacao cancelada.\n");
+            break;
+
+        default:
+            printf("Opcao invalida.\n");
+    }
+
+
 
 void removerReserva(Reserva *lista, int *qtd) {
     if (*qtd == 0){

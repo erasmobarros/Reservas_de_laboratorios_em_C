@@ -1,4 +1,5 @@
 #include "reservas.h"
+#include <ctype.h>
 
 // --- Funções Auxiliares (Internas) ---
 
@@ -14,12 +15,28 @@ int gerarIdUnico(Reserva *lista, int qtd) {
     }
     return maxId + 1;
 }
+int validarid(char *laboratorio) {
+    for (int i = 0; laboratorio[i] != '\0'; i++) {
+        if (!isdigit(laboratorio[i]) ) {
+            return 0; // String inválida
+        }
+    }
+    return 1; // String válida
+}
 
 int buscarPorId(Reserva *lista, int qtd, int id) {
     for (int i = 0; i < qtd; i++) {
         if (lista[i].id == id) return i;
     }
     return -1;
+}
+int validarnome(char *solicitante) {
+   for (int i =0; solicitante[i] != '\0'; i++) {
+        if (!isalpha(solicitante[i]) && !isspace(solicitante[i])) {
+            return 0; // Nome inválido
+        }
+    }
+    return 1;
 }
 
 int validarData(char *data) {
@@ -135,8 +152,16 @@ void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
     printf("\n--- Nova Reserva ---\n");
     printf("ID do Laboratorio: ");
     scanf(" %[^\n]", nova.laboratorio);
+    if (!validarid (nova.laboratorio)){
+        printf ("ID invalido. Tente novamente!!\n");
+        return;
+    }
     printf("Nome do Solicitante: ");
     scanf(" %[^\n]", nova.solicitante);
+    if (!validarnome(nova.solicitante)) {
+        printf("Nome do solicitante invalido. Tente novamente!!\n");
+        return;
+    }
     
     printf("Data (DD/MM/AAAA): ");
     scanf(" %s", nova.data);
@@ -217,7 +242,7 @@ void atualizarReserva(Reserva *lista, int qtd) {
     printf("Escolha: ");
     scanf("%d", &opcao);
     limparBuffer();
-
+    
     switch(opcao) {
         case 1:
             printf("Novo nome do solicitante: ");
@@ -226,15 +251,16 @@ void atualizarReserva(Reserva *lista, int qtd) {
             break;
 
         case 2:
-            printf("Novo laboratorio: ");
+            printf("Novo ID do laboratorio: ");
             scanf(" %[^\n]", lista[idx].laboratorio);
 
             if (!verificarDisponibilidadelab(lista, qtd, lista[idx].laboratorio)) {
                 printf("Laboratorio indisponivel! Alteracao cancelada.\n");
                 return;
             }
-            printf("Laboratorio atualizado!\n");
-            break;
+            else {
+                printf("Laboratorio atualizado!\n");
+            break;}
 
         case 3:
             printf("Nova data (DD/MM/AAAA): ");
@@ -248,8 +274,9 @@ void atualizarReserva(Reserva *lista, int qtd) {
                 printf("Data indisponivel! Alteracao cancelada.\n");
                 return;
             }
-            printf("Data atualizada!\n");
-            break;
+            else {
+                printf("Data atualizada!\n");
+            break;}
 
         case 4:
             printf("Novo horario inicial (HH:MM): ");
@@ -259,8 +286,9 @@ void atualizarReserva(Reserva *lista, int qtd) {
                 printf("Horario invalido! Alteracao cancelada.\n");
                 return;
             }
-            printf("Horario inicial atualizado!\n");
-            break;
+            else {
+                printf("Horario inicial atualizado!\n");
+            break;}
 
         case 5:
             printf("Novo horario final (HH:MM): ");
@@ -270,8 +298,8 @@ void atualizarReserva(Reserva *lista, int qtd) {
                 printf("Horario invalido! Alteracao cancelada.\n");
                 return;
             }
-            printf("Horario final atualizado!\n");
-            break;
+            else {printf("Horario final atualizado!\n");
+            break;}
 
         case 0:
             printf("Atualizacao cancelada.\n");

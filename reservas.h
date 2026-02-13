@@ -10,8 +10,8 @@ typedef struct {
     char laboratorio[50];
     char solicitante[50];
     char data[11];
-    char horario[6];
-    char horario_fim[6];
+    char horario[10];
+    char horario_fim[10];
 } Reserva;
 
 Reserva* inicializarSistema(int *capacidade, int *qtd);
@@ -28,4 +28,3 @@ void removerReserva(Reserva *lista, int *qtd);
 void limparBuffer();
 
 #endif
-    

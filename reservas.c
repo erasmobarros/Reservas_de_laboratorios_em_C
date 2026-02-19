@@ -48,19 +48,34 @@ int validarnome(char *solicitante) {
 }
 
 int validarData(char *data) {
+
     if (strlen(data) != 10) return 0;
     if (data[2] != '/' || data[5] != '/') return 0;
 
     int d, m, a;
+
     if (sscanf(data, "%d/%d/%d", &d, &m, &a) != 3)
         return 0;
 
     if (d < 1 || d > 31) return 0;
     if (m < 1 || m > 12) return 0;
-    if (a < 2024) return 0;
 
     return 1;
 }
+
+int validardataano(char *data) {
+
+    int d, m, a;
+
+    if (sscanf(data, "%d/%d/%d", &d, &m, &a) != 3)
+        return 0;
+
+    if (a < 2026)
+        return 0;
+
+    return 1;
+}
+
 
 int validarHorario(char *horario) {
     if (strlen(horario) != 5) return 0;
@@ -208,21 +223,29 @@ void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
         }
     }
     while (1) {
-        printf("Data (DD/MM/AAAA): ");
-        scanf("%s", nova.data);
 
-        if (!validarData(nova.data)) {
-            printf("Data invalida! Use formato DD/MM/AAAA.\n");
-        } else {
-            break;
-        }
+    printf("Data (DD/MM/AAAA): ");
+    scanf("%s", nova.data);
+
+    if (!validarData(nova.data)) {
+        printf("Data invalida! Use DD/MM/AAAA.\n");
+        continue;
     }
+
+    if (!validardataano(nova.data)) {
+        printf("Ano deve ser 2026 ou posterior!\n");
+        continue;
+    }
+
+    break;
+}
+
     while (1) {
         printf("Horario inicial (HH:MM): ");
         scanf("%s", nova.horario);
 
         if (!validarHorario(nova.horario)) {
-            printf("Horario invalido!\n");
+            printf("Horario invalido! Use HH:MM. \n");
         } else {
             break;
         }
@@ -232,7 +255,7 @@ void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
         scanf("%s", nova.horario_fim);
 
         if (!validarHorario(nova.horario_fim)) {
-            printf("Horario invalido!\n");
+            printf("Horario invalido! Use HH:MM.\n");
             continue;
         }
 
@@ -258,8 +281,8 @@ void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
     (*qtd)++;
 
     printf("\nReserva realizada com sucesso!\n");
-    printf("ID: %d | Lab: %s | Data: %s | %s ate %s\n",
-           nova.id, nova.laboratorio, nova.data, nova.horario, nova.horario_fim);
+    printf("ID: %d | Nome Solicitante: %s | Lab: %s | Data: %s | %s ate %s\n",
+           nova.id, nova.solicitante, nova.laboratorio, nova.data, nova.horario, nova.horario_fim);
 }
 
 
@@ -285,7 +308,7 @@ void atualizarReserva(Reserva *lista, int qtd){
     listarReservas(lista, qtd);
 
     int id;
-    printf("ID da reserva que deseja atualizar: ");
+    printf("\nInforme o ID da reserva que deseja atualizar: ");
     scanf("%d", &id);
     limparBuffer();
 
@@ -337,7 +360,7 @@ void atualizarReserva(Reserva *lista, int qtd){
             printf("Nova data (DD/MM/AAAA): ");
             scanf("%s", temp);
             if(!validarData(temp)) {
-                printf("Data invalida!\n");
+                printf("Data invalida! Use HH:MM.\n");
                 return;
             }
 
@@ -353,30 +376,38 @@ void atualizarReserva(Reserva *lista, int qtd){
             break;
 
         case 4:
-            printf("Novo inicio (HH:MM): ");
-            scanf("%s", temp);
-            if(!validarHorario(temp)) {
-                printf("Horario invalido!\n");
-                return;
-            }
+    printf("Novo inicio (HH:MM): ");
+    scanf("%s", temp);
 
-            if(horarioConflita(lista, qtd,
-               lista[idx].laboratorio,
-               lista[idx].data,
-               temp,
-               lista[idx].horario_fim, idx)){
-                printf("Operacao cancelada.\n");
-                return;
-            }
+    if(!validarHorario(temp)) {
+        printf("Horario invalido!\n");
+        return;
+    }
 
-            strcpy(lista[idx].horario, temp);
-            break;
+    
+    if(horaParaMinutos(temp) <= horaParaMinutos(lista[idx].horario_fim)) {
+        printf("Horario inicial deve ser menor que o final!\n");
+        return;
+    }
+
+    if(horarioConflita(lista, qtd,
+       lista[idx].laboratorio,
+       lista[idx].data,
+       temp,
+       lista[idx].horario_fim, idx)){
+        printf("Operacao cancelada.\n");
+        return;
+    }
+
+    strcpy(lista[idx].horario, temp);
+    break;
+
 
         case 5:
             printf("Novo fim (HH:MM): ");
             scanf("%s", temp);
             if(!validarHorario(temp)) {
-                printf("Horario invalido!\n");
+                printf("Horario invalido! Use HH:MM.\n");
                 return;
             }
 

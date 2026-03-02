@@ -4,19 +4,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-// ============================================================
-// FUNÇÕES AUXILIARES
-// ============================================================
 
-// Limpa o buffer do teclado (stdin) para evitar pular leituras de scanf/fgets
-// Útil após ler números e antes de ler strings/caracteres.
+// FUNÇÕES AUXILIARES
+
+
+// Limpa o buffer do teclado (stdin) para evitar pular leituras
 void limparBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-// Gera um ID novo baseado no maior ID existente na lista + 1.
-// Garante que cada reserva tenha um identificador único.
+// Gera um ID novo baseado no maior ID existente na lista + 1 e garante que cada reserva tenha um identificador único.
 int gerarIdUnico(Reserva *lista, int qtd) {
     int maxId = 0;
     for (int i = 0; i < qtd; i++) {
@@ -26,8 +24,7 @@ int gerarIdUnico(Reserva *lista, int qtd) {
     return maxId + 1;
 }
 
-// Busca o índice de uma reserva no array baseada no seu ID numérico.
-// Retorna -1 se não encontrar.
+// Busca o índice de uma reserva no array baseada no seu ID numérico e retornando-1 se não encontrar..
 int buscarPorId(Reserva *lista, int qtd, int id) {
     for (int i = 0; i < qtd; i++)
         if (lista[i].id == id)
@@ -35,19 +32,18 @@ int buscarPorId(Reserva *lista, int qtd, int id) {
     return -1;
 }
 
-// Converte uma string de horário "HH:MM" para minutos totais desde a meia-noite.
-// Ex: "01:30" vira 90 minutos. Facilita comparações matemáticas de tempo.
+// Converte uma string de horário "HH:MM" para minutos totais desde a meia-noite. Ex: "01:30" vira 90 minutos, assim, facilitando comparações matemáticas de tempo.
 int horaParaMinutos(char *h){
     int hh = 0, mm = 0;
     sscanf(h,"%d:%d", &hh, &mm);
     return (hh * 60) + mm;
 }
 
-// ============================================================
-// FUNÇÕES DE VALIDAÇÃO
-// ============================================================
 
-// Verifica se a string contém apenas dígitos numéricos.
+// FUNÇÕES DE VALIDAÇÃO
+
+
+// Verifica se a string de validar ID contém apenas dígitos numéricos.
 int validarid(char *laboratorio) {
     for (int i = 0; laboratorio[i] != '\0'; i++) {
         if (!isdigit(laboratorio[i]) ) {
@@ -57,7 +53,7 @@ int validarid(char *laboratorio) {
     return 1;
 }
 
-// Verifica se o laboratório contém apenas letras ou números (alfanumérico).
+// Verifica se o laboratório contém apenas números ou letras.
 int validarLab(char *laboratorio) {
     for (int i = 0; laboratorio[i] != '\0'; i++) {
         if (!isalnum(laboratorio[i]) && !isspace(laboratorio[i]))
@@ -76,7 +72,7 @@ int validarnome(char *solicitante) {
     return 1;
 }
 
-// Valida o formato (tamanho e barras) e se o dia/mês são reais.
+// Valida o formato tamanho e barras e se o dia/mês são reais.
 int validarData(char *data) {
     if (strlen(data) != 10) return 0;
     if (data[2] != '/' || data[5] != '/') return 0;
@@ -92,7 +88,7 @@ int validarData(char *data) {
     return 1;
 }
 
-// Regra de negócio: Valida se o ano é igual ou posterior a 2026.
+// Valida se o ano é igual ou posterior a 2026.
 int validardataano(char *data) {
     int d, m, a;
     if (sscanf(data, "%d/%d/%d", &d, &m, &a) != 3)
@@ -104,7 +100,7 @@ int validardataano(char *data) {
     return 1;
 }
 
-// Valida formato HH:MM e se as horas (0-23) e minutos (0-59) estão corretos.
+// Valida formato HH:MM e se as horas e minutos estão corretos.
 int validarHorario(char *horario) {
     if (strlen(horario) != 5) return 0;
     if (horario[2] != ':') return 0;
@@ -119,13 +115,11 @@ int validarHorario(char *horario) {
     return 1;
 }
 
-// ============================================================
-// LÓGICA DE CONFLITO
-// ============================================================
 
-// Verifica se existe sobreposição de horários para o mesmo laboratório na mesma data.
-// Retorna 1 se houver conflito, 0 se estiver livre.
-// Parâmetro 'ignorar': índice da reserva a ser ignorada (usado na Atualização para não conflitar consigo mesma).
+// LÓGICA DE CONFLITO
+
+
+// Verifica se existe sobreposição de horários para o mesmo laboratório na mesma data. Assim, retornando 1 se houver conflito, 0 se estiver livre.
 int horarioConflita(Reserva *lista, int qtd,
                     char *lab, char *data,
                     char *inicio, char *fim,
@@ -144,8 +138,8 @@ int horarioConflita(Reserva *lista, int qtd,
             int ini = horaParaMinutos(lista[i].horario);
             int fimReservaExistente = horaParaMinutos(lista[i].horario_fim);
 
-            // Lógica de intersecção de intervalos:
-            // (InicioNovo < FimAntigo) E (FimNovo > InicioAntigo)
+            // Lógica de intersecção de intervalos: (InicioNovo < FimAntigo) E (FimNovo > InicioAntigo)
+            
             if(iniNovo < fimReservaExistente && fimNovo > ini) {
                 printf("\nConflito no horario:\n");
                 printf("O %s ja esta reservado por '%s' das %s as %s no dia %s.\n", 
@@ -158,9 +152,7 @@ int horarioConflita(Reserva *lista, int qtd,
     return 0;
 }
 
-// ============================================================
 // GERENCIAMENTO DE MEMÓRIA E SISTEMA
-// ============================================================
 
 // Aloca a memória inicial para o vetor dinâmico de Reservas.
 Reserva* inicializarSistema(int *capacidade, int *qtd) {
@@ -193,9 +185,8 @@ void liberarMemoria(Reserva *lista) {
     if (lista != NULL) free(lista);
 }
 
-// ============================================================
+
 // PERSISTÊNCIA DE DADOS (ARQUIVOS)
-// ============================================================
 
 // Grava todas as reservas no arquivo de texto.
 void salvarDados(Reserva *lista, int qtd) {
@@ -205,7 +196,7 @@ void salvarDados(Reserva *lista, int qtd) {
         return;
     }
     for (int i = 0; i < qtd; i++) {
-        // Formato CSV separado por ponto e vírgula
+        // Formato CSV separado por ponto e vírgula para facilitar leitura.
         fprintf(arquivo, "%d;%s;%s;%s;%s;%s\n", 
             lista[i].id, lista[i].laboratorio, lista[i].solicitante, 
             lista[i].data, lista[i].horario, lista[i].horario_fim);
@@ -217,7 +208,7 @@ void salvarDados(Reserva *lista, int qtd) {
 // Lê o arquivo de texto e reconstrói a lista de reservas na memória.
 void carregarDados(Reserva **lista, int *capacidade, int *qtd) {
     FILE *arquivo = fopen("dados_reservas.txt", "r");
-    if (arquivo == NULL) return; // Arquivo não existe ainda, apenas retorna
+    if (arquivo == NULL) return; // Se o arquivo não existir ainda, apenas retorna
 
     char linha[256];
     while (fgets(linha, sizeof(linha), arquivo)) {
@@ -236,9 +227,9 @@ void carregarDados(Reserva **lista, int *capacidade, int *qtd) {
     fclose(arquivo);
 }
 
-// ============================================================
-// FUNÇÕES CRUD (Inserir, Listar, Atualizar, Remover)
-// ============================================================
+
+// FUNÇÕES CRUD
+
 
 void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
     // Verifica capacidade antes de começar
@@ -251,13 +242,13 @@ void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
 
     printf("\n--- Nova Reserva ---\n");
     
-    // Loops 'while(1)' forçam o usuário a digitar um dado válido para avançar
+    // Loops while(1) forçam o usuário a digitar um dado válido para avançar
     while (1) {
         printf("ID do Laboratorio: ");
         scanf(" %[^\n]", nova.laboratorio);
 
-        if (!validarid(nova.laboratorio)) {
-            printf("ID invalido! Digite apenas numeros.\n");
+        if (!validarLab(nova.laboratorio)) {
+            printf("ID invalido! Digite apenas letras ou numeros.\n");
         } else {
             break;
         }
@@ -315,8 +306,7 @@ void inserirReserva(Reserva **lista, int *capacidade, int *qtd) {
         break;
     }
 
-    // Verifica conflito de horário no banco de dados atual
-    // Passa -1 no 'ignorar' pois é uma nova reserva (não ignora ninguém)
+    // Verifica conflito de horário no txt atual
     if (horarioConflita(*lista, *qtd,
                         nova.laboratorio,
                         nova.data,
@@ -346,7 +336,7 @@ void listarReservas(Reserva *lista, int qtd) {
     printf("\nID | Laboratorio | Solicitante | Data       | Inico      | Fim \n");
     printf("---|-------------|-------------|------------|------------|--------\n");
     for (int i = 0; i < qtd; i++) {
-        // %-Ns alinha à esquerda com N espaços
+        
         printf("%-2d | %-11s | %-11s | %-10s | %-11s| %s\n", 
             lista[i].id, lista[i].laboratorio, lista[i].solicitante, lista[i].data, lista[i].horario, lista[i].horario_fim);
     }
@@ -413,7 +403,7 @@ void atualizarReserva(Reserva *lista, int qtd){
             if(horarioConflita(lista, qtd, temp,
                lista[idx].data,
                lista[idx].horario,
-               lista[idx].horario_fim, idx)){ // Passa 'idx' para ignorar a si mesma na checagem
+               lista[idx].horario_fim, idx)){ 
                 printf("Conflito de horario!\n");
                 continue;
             }
@@ -538,8 +528,7 @@ void removerReserva(Reserva *lista, int *qtd) {
    for (int i = 0; i < *qtd; i++){
         if (lista[i].id == id){
             encontrado = 1;
-            // Shift à esquerda: move todos os elementos da frente uma casa para trás
-            // para preencher o buraco deixado pela remoção
+            // Shift à esquerda: move todos os elementos da frente uma casa para trás para preencher o buraco deixado pela remoção
             for (int j = i; j < *qtd - 1; j++){
                 lista[j] = lista[j+1];
             }

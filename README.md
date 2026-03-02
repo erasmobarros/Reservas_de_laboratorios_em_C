@@ -37,7 +37,7 @@ Garante que o Horário Final seja maior que o Horário Inicial.
 
 Sanitização de Entradas:
 
-Laboratório: Aceita apenas letras e números.
+Laboratório: Aceita apenas números.
 
 Solicitante: Aceita apenas letras e espaços.
 
@@ -72,23 +72,11 @@ Bash
 💾 Formato do Arquivo de Dados
 Os dados são salvos em dados_reservas.txt no seguinte formato (CSV separado por ponto e vírgula):
 
-Plaintext
-ID;Laboratorio;Solicitante;Data;HoraInicio;HoraFim
-Exemplo:
-
-Plaintext
-1;Lab01;Carlos Silva;10/05/2026;08:00;10:00
-2;LabQuimica;Ana Souza;12/06/2026;14:00;16:00
 🛠️ Tecnologias Utilizadas
-Linguagem C (Padrão C99 ou superior).
+Linguagem C.
 
 Bibliotecas Padrão: <stdio.h>, <stdlib.h>, <string.h>, <ctype.h>.
 
-📌 Melhorias Futuras (To-Do)
-[ ] Implementar busca de reservas por data ou nome.
+Desenvolvido para fins acadêmicos por Jose Erasmo do Nascimento Barros Filho e João Vitor Tenorio. 
 
-[ ] Adicionar sistema de login para administradores.
-
-[ ] Criar relatórios de ocupação por laboratório.
-
-Desenvolvido para fins acadêmicos.
+Github do projeto : https://github.com/erasmobarros/Reservas_de_laboratorios_em_C 

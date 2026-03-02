@@ -1,8 +1,3 @@
-O Gemini disse
-Aqui está um modelo completo e profissional de README.md para o seu projeto. Ele explica o que o sistema faz, como compilar, as regras de negócio implementadas e a estrutura dos arquivos.
-
-Você pode copiar e colar este conteúdo em um arquivo chamado README.md na pasta do seu projeto.
-
 🧪 Sistema de Gerenciamento de Reservas de Laboratórios
 Este é um sistema desenvolvido em Linguagem C para gerenciar o agendamento de horários em laboratórios. O software permite criar, listar, atualizar e remover reservas, garantindo a integridade dos dados através de validações rigorosas e persistência em arquivo.
 
